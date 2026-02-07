@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>EthaNet</title>
+        <style>
+        	body {
+              font-family: 'Segoe UI', sans-serif;
+              background-color: #1e1e1e;
+              color: #fff;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+            }
+
+            .chat-container {
+              width: 850px;
+              background: #2b2b2b;
+              padding: 20px;
+              border-radius: 20px;
+            }
+
+            #chat-box {
+              height: 400px;
+              overflow-y: auto;
+              margin-bottom: 10px;
+              border: 0.5px solid rgba(255,255,255,0.5);
+              padding: 15px;
+              border-radius: 20px;
+              background-color: #1a1a1a;
+            }
+
+            .user, .bot {
+              margin-bottom: 10px;
+            }
+
+            #user-input {
+              width: 85%;
+              padding: 10px;
+              border-radius: 20px;
+              border: 0.5px solid rgba(255,255,255,0.5);
+              outline: none;
+              background-color: rgba(0,0,0,0.5);
+              color: white;
+              backdrop-filter: blur(5px);
+              transition-duration: 0.25s;
+            }
+            #user-input:hover {
+              background-color: rgba(255,255,255,0.05);
+            }
+            #user-input:active {
+              background-color: rgba(0,0,0,0.5);
+            }
+
+            #send-btn {
+              padding: 10px;
+              background-color: rgba(0,0,0,0.5);
+              border: 0.5px solid rgba(255,255,255,0.5);
+              border-radius: 20px;
+              cursor: pointer;
+              color: white;
+              font-weight: bold;
+              margin-left: 10px;
+              backdrop-filter: blur(5px);
+              transition-duration: 0.25s;
+            }
+            #send-btn:hover {
+           	  scale: 1.25;
+              background-color: rgba(0,0,0,0.05);
+              /*box-shadow: 0px 0px 5px white;*/
+            }
+            #send-btn:active {
+              scale: 0.95;
+              background-color: rgba(0,0,0,0.5);
+            }
+            #beta {
+              font-size: 11px;
+              font-weight: normal;
+            }
+
+            .user { color: #ffffff; } /* Green for you */
+            .bot { color: #e3e3e3; }  /* Blue for EthaNet */
+        </style>
+    </head>
+    <body>
+    <div class="chat-container">
+        <h1>EthaNet<span id="beta">BETA</span> - v0.1.25</h1>
+        <div id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Say something..." />
+        <button id="send-btn">Send</button>
+    </div>
+    <script type="module">
+    	// Import the Google AI SDK (using a CDN for simplicity)
+        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+        const API_KEY = "AIzaSyCszKRifG-wkMtH62EFgM4MYMvQpCdfqts"; // Get your key at aistudio.google.com
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        // Change this line in your script.js if you get a 404 error
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const chatBox = document.getElementById("chat-box");
+        const userInput = document.getElementById("user-input");
+        const sendBtn = document.getElementById("send-btn");
+
+        async function getResponse() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // Display user message
+            appendMessage("user", text);
+            userInput.value = "";
+
+            // Show typing indicator
+            appendMessage("bot", "EthaNet is typing...");
+
+            try {
+                // Send request to Gemini
+                const result = await model.generateContent(text);
+                const response = await result.response;
+                const botText = response.text();
+
+                // Remove typing indicator and display bot response
+                chatBox.removeChild(chatBox.lastChild);
+                appendMessage("bot", botText);
+            } catch (error) {
+                appendMessage("bot", "ERROR code 404");
+            }
+        }
+
+        function appendMessage(sender, text) {
+            const msgDiv = document.createElement("div");
+            msgDiv.classList.add(sender);
+            msgDiv.innerHTML = `<strong>${sender === 'user' ? 'You' : 'EthaNet'}:</strong> ${text}`;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
+        }
+
+        sendBtn.addEventListener("click", getResponse);
+
+        // Allow pressing "Enter" to send
+        userInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") getResponse();
+        });
+    </script>
+    </body>
+</html>
