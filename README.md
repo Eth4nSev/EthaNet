@@ -1,2 +1,2 @@
 # EthaNet
-AI
+This is an AI model created by Ethan using the Genini custom models and functions through Gemini Foundation Model API. DO NOT abuse the API Key! Considering this is the first BETA verison, bugs are expected. If you find bugs, please report them.
