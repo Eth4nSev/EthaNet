@@ -90,3 +90,44 @@ body {
   font-size: 11px;
   font-weight: normal;
 }
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  body {
+    height: 100svh; /* fixes mobile browser UI issues */
+    padding: 10px;
+    align-items: flex-start;
+  }
+
+  .chat-container {
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    border-radius: 16px;
+  }
+
+  #chat-box {
+    height: calc(100svh - 140px); /* leaves room for input + keyboard */
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .input-row {
+    gap: 8px;
+  }
+
+  #user-input {
+    width: 100%;
+    font-size: 16px; /* prevents iOS zoom */
+    padding: 12px;
+  }
+
+  #send-btn {
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+
+  #send-btn:hover {
+    scale: 1; /* no hover nonsense on mobile */
+  }
+}
