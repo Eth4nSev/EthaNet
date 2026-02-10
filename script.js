@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 
 // If this 404s, change the model name
 const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash"
+  model: "gemini-1.5-flash"
 });
 
 const chatBox = document.getElementById("chat-box");
