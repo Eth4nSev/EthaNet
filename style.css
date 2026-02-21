@@ -92,7 +92,7 @@ body {
 }
 
 /* Mobile optimization */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   body {
     height: 100svh; /* fixes mobile browser UI issues */
     padding: 10px;
