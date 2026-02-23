@@ -2,7 +2,7 @@
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
 // Consider storing API keys securely in a server or environment variables
-const API_KEY = "YOUR_SECURE_API_KEY";
+const API_KEY = "AIzaSyCszKRifG-wkMtH62EFgM4MYMvQpCdfqts";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 let model;
