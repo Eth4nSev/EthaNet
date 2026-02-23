@@ -1,13 +1,17 @@
 // Import the Google AI SDK
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-const API_KEY = "AIzaSyCszKRifG-wkMtH62EFgM4MYMvQpCdfqts";
+// Consider storing API keys securely in a server or environment variables
+const API_KEY = "YOUR_SECURE_API_KEY";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
-// If this 404s, change the model name
-const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash"
-});
+let model;
+try {
+  model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+} catch (error) {
+  console.error("Error loading model:", error);
+  alert("Failed to load AI model. Please check the configuration.");
+}
 
 const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
@@ -24,27 +28,31 @@ async function getResponse() {
 
   try {
     const result = await model.generateContent(text);
-    const response = await result.response;
-    const botText = response.text();
+    if (!result || !result.response || !result.response.text) {
+      throw new Error("Invalid response from model");
+    }
 
+    const botText = result.response.text();
     chatBox.removeChild(chatBox.lastChild);
-    appendMessage("bot", botText);
+    appendMessage("bot", botText || "I couldn't understand that.");
   } catch (error) {
+    console.error("Error generating response:", error);
     chatBox.removeChild(chatBox.lastChild);
-    appendMessage("bot", "ERROR code 404");
+    appendMessage("bot", "I ran into an issue. Please try again.");
   }
 }
 
 function appendMessage(sender, text) {
+  const sanitizedText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;"); // Basic Sanitation
   const msgDiv = document.createElement("div");
   msgDiv.classList.add(sender);
-  msgDiv.innerHTML = `<strong>${sender === "user" ? "You" : "EthaNet"}:</strong> ${text}`;
+  msgDiv.innerHTML = `<strong>${sender === "user" ? "You" : "EthaNet"}:</strong> ${sanitizedText}`;
   chatBox.appendChild(msgDiv);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 sendBtn.addEventListener("click", getResponse);
 
-userInput.addEventListener("keypress", (e) => {
+userInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") getResponse();
 });
