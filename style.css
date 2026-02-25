@@ -13,6 +13,9 @@ body {
   bottom: 0px;
   left: 0px;
 }
+#github:visited {
+  color: lightblue;
+}
 
 .chat-container {
   width: 850px;
