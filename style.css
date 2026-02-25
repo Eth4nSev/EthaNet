@@ -7,6 +7,12 @@ body {
   align-items: center;
   height: 100vh;
 }
+#github {
+  position: fixed;
+  color: lightblue;
+  bottom: 0px;
+  left: 0px;
+}
 
 .chat-container {
   width: 850px;
